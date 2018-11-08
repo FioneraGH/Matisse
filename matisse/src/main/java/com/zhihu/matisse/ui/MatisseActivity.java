@@ -15,6 +15,7 @@
  */
 package com.zhihu.matisse.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -109,24 +110,29 @@ public class MatisseActivity extends AppCompatActivity implements
 
         if (mSpec.capture) {
             mMediaStoreCompat = new MediaStoreCompat(this);
-            if (mSpec.captureStrategy == null)
+            if (mSpec.captureStrategy == null) {
                 throw new RuntimeException("Don't forget to set CaptureStrategy.");
+            }
             mMediaStoreCompat.setCaptureStrategy(mSpec.captureStrategy);
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         Drawable navigationIcon = toolbar.getNavigationIcon();
         TypedArray ta = getTheme().obtainStyledAttributes(new int[]{R.attr.album_element_color});
         int color = ta.getColor(0, 0);
         ta.recycle();
-        navigationIcon.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        if (navigationIcon != null) {
+            navigationIcon.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        }
 
-        mButtonPreview = (TextView) findViewById(R.id.button_preview);
-        mButtonApply = (TextView) findViewById(R.id.button_apply);
+        mButtonPreview = findViewById(R.id.button_preview);
+        mButtonApply = findViewById(R.id.button_apply);
         mButtonPreview.setOnClickListener(this);
         mButtonApply.setOnClickListener(this);
         mContainer = findViewById(R.id.container);
@@ -183,11 +189,13 @@ public class MatisseActivity extends AppCompatActivity implements
         super.onBackPressed();
     }
 
+    @SuppressLint("ObsoleteSdkInt")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK)
+        if (resultCode != RESULT_OK) {
             return;
+        }
 
         if (requestCode == REQUEST_CODE_PREVIEW) {
             Bundle resultBundle = data.getBundleExtra(BasePreviewActivity.EXTRA_RESULT_BUNDLE);
@@ -231,9 +239,10 @@ public class MatisseActivity extends AppCompatActivity implements
             result.putParcelableArrayListExtra(EXTRA_RESULT_SELECTION, selected);
             result.putStringArrayListExtra(EXTRA_RESULT_SELECTION_PATH, selectedPath);
             setResult(RESULT_OK, result);
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 MatisseActivity.this.revokeUriPermission(contentUri,
                         Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
             finish();
         }
     }
