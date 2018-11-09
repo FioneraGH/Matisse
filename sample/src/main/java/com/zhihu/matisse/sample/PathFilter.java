@@ -27,34 +27,31 @@ import com.zhihu.matisse.internal.utils.PhotoMetadataUtils;
 import java.util.HashSet;
 import java.util.Set;
 
-class GifSizeFilter extends Filter {
+class PathFilter
+        extends Filter {
 
-    private int mMinWidth;
-    private int mMinHeight;
-    private int mMaxSize;
+    private String mPath;
 
-    GifSizeFilter(int minWidth, int minHeight, int maxSizeInBytes) {
-        mMinWidth = minWidth;
-        mMinHeight = minHeight;
-        mMaxSize = maxSizeInBytes;
+    PathFilter(String path) {
+        mPath = path;
     }
 
     @Override
     public Set<MimeType> constraintTypes() {
         return new HashSet<MimeType>() {{
-            add(MimeType.GIF);
+            addAll(MimeType.ofAll());
         }};
     }
 
     @Override
     public IncapableCause filter(Context context, Item item) {
-        if (!needFiltering(context, item))
+        if (!needFiltering(context, item)) {
             return null;
+        }
 
-        Point size = PhotoMetadataUtils.getBitmapBound(context.getContentResolver(), item.getContentUri());
-        if (size.x < mMinWidth || size.y < mMinHeight || item.size > mMaxSize) {
-            return new IncapableCause(IncapableCause.DIALOG, context.getString(R.string.error_gif, mMinWidth,
-                    String.valueOf(PhotoMetadataUtils.getSizeInMB(mMaxSize))));
+        String path = PhotoMetadataUtils.getPath(context.getContentResolver(), item.getContentUri());
+        if (path.startsWith(mPath)) {
+            return new IncapableCause(IncapableCause.DIALOG, "无法选择该路径下的文件");
         }
         return null;
     }

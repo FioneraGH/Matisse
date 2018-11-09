@@ -58,7 +58,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.zhihu).setOnClickListener(this);
         findViewById(R.id.dracula).setOnClickListener(this);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        RecyclerView recyclerView = findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mAdapter = new UriAdapter());
     }
@@ -84,21 +84,20 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                             .capture(true)
                                             .captureStrategy(
                                                     new CaptureStrategy(true, "com.zhihu.matisse.sample.fileprovider","test"))
-                                            .maxSelectable(9)
-                                            .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
+                                            .maxSelectable(3)
+                                            .addFilter(new PathFilter("/storage/emulated/0/gz_img/"))
                                             .gridExpectedSize(
                                                     getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
                                             .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
                                             .thumbnailScale(0.85f)
-//                                            .imageEngine(new GlideEngine())  // for glide-V3
-                                            .imageEngine(new Glide4Engine())    // for glide-V4
+                                            // for glide-V4
+                                            .imageEngine(new Glide4Engine())
                                             .setOnSelectedListener(new OnSelectedListener() {
                                                 @Override
                                                 public void onSelected(
                                                         @NonNull List<Uri> uriList, @NonNull List<String> pathList) {
                                                     // DO SOMETHING IMMEDIATELY HERE
                                                     Log.e("onSelected", "onSelected: pathList=" + pathList);
-
                                                 }
                                             })
                                             .originalEnable(true)
@@ -194,8 +193,8 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
 
             UriViewHolder(View contentView) {
                 super(contentView);
-                mUri = (TextView) contentView.findViewById(R.id.uri);
-                mPath = (TextView) contentView.findViewById(R.id.path);
+                mUri = contentView.findViewById(R.id.uri);
+                mPath = contentView.findViewById(R.id.path);
             }
         }
     }
