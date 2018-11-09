@@ -65,7 +65,10 @@ public final class PhotoMetadataUtils {
             w = imageSize.y;
             h = imageSize.x;
         }
-        if (h == 0) return new Point(MAX_WIDTH, MAX_WIDTH);
+        if (h == 0) {
+            //noinspection SuspiciousNameCombination
+            return new Point(MAX_WIDTH, MAX_WIDTH);
+        }
         DisplayMetrics metrics = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
         float screenWidth = (float) metrics.widthPixels;
@@ -107,18 +110,12 @@ public final class PhotoMetadataUtils {
         }
 
         if (SCHEME_CONTENT.equals(uri.getScheme())) {
-            Cursor cursor = null;
-            try {
-                cursor = resolver.query(uri, new String[]{MediaStore.Images.ImageColumns.DATA},
-                        null, null, null);
+            try (Cursor cursor = resolver.query(uri,
+                    new String[]{MediaStore.Images.ImageColumns.DATA}, null, null, null)) {
                 if (cursor == null || !cursor.moveToFirst()) {
                     return null;
                 }
                 return cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA));
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
             }
         }
         return uri.getPath();
@@ -172,7 +169,8 @@ public final class PhotoMetadataUtils {
         df.applyPattern("0.0");
         String result = df.format((float) sizeInBytes / 1024 / 1024);
         Log.e(TAG, "getSizeInMB: " + result);
-        result = result.replaceAll(",", "."); // in some case , 0.0 will be 0,0
+        // in some case , 0.0 will be 0,0
+        result = result.replaceAll(",", ".");
         return Float.valueOf(result);
     }
 }
