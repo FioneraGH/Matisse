@@ -104,6 +104,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                             .originalEnable(true)
                                             .maxOriginalSize(10)
                                             .autoHideToolbarOnSingleTap(true)
+                                            .setIgnoredPaths(new String[]{"/storage/emulated/0/gz_img/%", "/storage/emulated/0/Pictures/%"})
                                             .setOnCheckedListener(new OnCheckedListener() {
                                                 @Override
                                                 public void onCheck(boolean isChecked) {

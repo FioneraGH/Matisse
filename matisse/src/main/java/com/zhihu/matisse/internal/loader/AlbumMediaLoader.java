@@ -27,7 +27,10 @@ import android.support.v4.content.CursorLoader;
 import com.zhihu.matisse.internal.entity.Album;
 import com.zhihu.matisse.internal.entity.Item;
 import com.zhihu.matisse.internal.entity.SelectionSpec;
+import com.zhihu.matisse.internal.utils.IgnoredPathHelper;
 import com.zhihu.matisse.internal.utils.MediaStoreCompat;
+
+import static com.zhihu.matisse.internal.loader.AlbumLoader.PATH_HOLDER;
 
 /**
  * Load images and videos into a single cursor.
@@ -43,6 +46,7 @@ public class AlbumMediaLoader extends CursorLoader {
 
     // === params for album ALL && showSingleMediaType: false ===
     private static final String SELECTION_ALL =
+            PATH_HOLDER +
             "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
                     + " OR "
                     + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?)"
@@ -55,6 +59,7 @@ public class AlbumMediaLoader extends CursorLoader {
 
     // === params for album ALL && showSingleMediaType: true ===
     private static final String SELECTION_ALL_FOR_SINGLE_MEDIA_TYPE =
+            PATH_HOLDER +
             MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
                     + " AND " + MediaStore.MediaColumns.SIZE + ">0";
 
@@ -65,6 +70,7 @@ public class AlbumMediaLoader extends CursorLoader {
 
     // === params for ordinary album && showSingleMediaType: false ===
     private static final String SELECTION_ALBUM =
+            PATH_HOLDER +
             "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
                     + " OR "
                     + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?)"
@@ -83,6 +89,7 @@ public class AlbumMediaLoader extends CursorLoader {
 
     // === params for ordinary album && showSingleMediaType: true ===
     private static final String SELECTION_ALBUM_FOR_SINGLE_MEDIA_TYPE =
+            PATH_HOLDER +
             MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
                     + " AND "
                     + " bucket_id=?"
@@ -133,7 +140,10 @@ public class AlbumMediaLoader extends CursorLoader {
             }
             enableCapture = false;
         }
-        return new AlbumMediaLoader(context, selection, selectionArgs, enableCapture);
+
+        IgnoredPathHelper.SelectionConfig selectionConfig = IgnoredPathHelper.generateIgnoreSql(
+                selection, selectionArgs, PATH_HOLDER);
+        return new AlbumMediaLoader(context, selectionConfig.selection, selectionConfig.selectionArgs, enableCapture);
     }
 
     @Override

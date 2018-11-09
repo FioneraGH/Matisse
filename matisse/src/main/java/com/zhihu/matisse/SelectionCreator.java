@@ -356,6 +356,17 @@ public final class SelectionCreator {
     }
 
     /**
+     * Set path array for ignoring some album.
+     *
+     * @param ignoredPaths ignoredPaths
+     * @return {@link SelectionCreator} for fluent API.
+     */
+    public SelectionCreator setIgnoredPaths(@Nullable String[] ignoredPaths) {
+        mSelectionSpec.ignoredPaths = ignoredPaths;
+        return this;
+    }
+
+    /**
      * Start to select media and wait for result.
      *
      * @param requestCode Identity of the request Activity or Fragment.

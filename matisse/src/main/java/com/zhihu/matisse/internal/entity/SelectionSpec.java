@@ -57,6 +57,11 @@ public final class SelectionSpec {
     public int originalMaxSize;
     public OnCheckedListener onCheckedListener;
 
+    /**
+     * 忽略的路径
+     */
+    public String[] ignoredPaths;
+
     private SelectionSpec() {
     }
 
@@ -92,6 +97,8 @@ public final class SelectionSpec {
         originalable = false;
         autoHideToobar = false;
         originalMaxSize = Integer.MAX_VALUE;
+
+        ignoredPaths = new String[]{};
     }
 
     public boolean singleSelectionModeEnabled() {
@@ -112,6 +119,10 @@ public final class SelectionSpec {
 
     public boolean onlyShowVideos() {
         return showSingleMediaType && MimeType.ofVideo().containsAll(mimeTypeSet);
+    }
+
+    public String[] getIgnoredPaths() {
+        return ignoredPaths;
     }
 
     private static final class InstanceHolder {
