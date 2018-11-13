@@ -38,6 +38,7 @@ public final class SelectionSpec {
     @StyleRes
     public int themeId;
     public int orientation;
+    public boolean fullscreen;
     public boolean countable;
     public int maxSelectable;
     public int maxImageSelectable;
@@ -55,6 +56,11 @@ public final class SelectionSpec {
     public boolean autoHideToobar;
     public int originalMaxSize;
     public OnCheckedListener onCheckedListener;
+
+    /**
+     * 忽略的路径
+     */
+    public String[] ignoredPaths;
 
     private SelectionSpec() {
     }
@@ -75,6 +81,7 @@ public final class SelectionSpec {
         showSingleMediaType = false;
         themeId = R.style.Matisse_Zhihu;
         orientation = 0;
+        fullscreen = false;
         countable = false;
         maxSelectable = 1;
         maxImageSelectable = 0;
@@ -90,6 +97,8 @@ public final class SelectionSpec {
         originalable = false;
         autoHideToobar = false;
         originalMaxSize = Integer.MAX_VALUE;
+
+        ignoredPaths = new String[]{};
     }
 
     public boolean singleSelectionModeEnabled() {
@@ -100,12 +109,20 @@ public final class SelectionSpec {
         return orientation != ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
     }
 
+    public boolean needFullscreenRestriction() {
+        return fullscreen;
+    }
+
     public boolean onlyShowImages() {
         return showSingleMediaType && MimeType.ofImage().containsAll(mimeTypeSet);
     }
 
     public boolean onlyShowVideos() {
         return showSingleMediaType && MimeType.ofVideo().containsAll(mimeTypeSet);
+    }
+
+    public String[] getIgnoredPaths() {
+        return ignoredPaths;
     }
 
     private static final class InstanceHolder {

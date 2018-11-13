@@ -26,12 +26,14 @@ import android.support.v4.content.CursorLoader;
 
 import com.zhihu.matisse.internal.entity.Album;
 import com.zhihu.matisse.internal.entity.SelectionSpec;
+import com.zhihu.matisse.internal.utils.IgnoredPathHelper;
 
 /**
  * Load all albums (grouped by bucket_id) into a single cursor.
  */
 public class AlbumLoader extends CursorLoader {
     public static final String COLUMN_COUNT = "count";
+    public static final String PATH_HOLDER = "<path>";
     private static final Uri QUERY_URI = MediaStore.Files.getContentUri("external");
     private static final String[] COLUMNS = {
             MediaStore.Files.FileColumns._ID,
@@ -48,6 +50,7 @@ public class AlbumLoader extends CursorLoader {
 
     // === params for showSingleMediaType: false ===
     private static final String SELECTION =
+            PATH_HOLDER +
             "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
                     + " OR "
                     + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?)"
@@ -61,6 +64,7 @@ public class AlbumLoader extends CursorLoader {
 
     // === params for showSingleMediaType: true ===
     private static final String SELECTION_FOR_SINGLE_MEDIA_TYPE =
+            PATH_HOLDER +
             MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
                     + " AND " + MediaStore.MediaColumns.SIZE + ">0"
                     + ") GROUP BY (bucket_id";
@@ -89,7 +93,10 @@ public class AlbumLoader extends CursorLoader {
             selection = SELECTION;
             selectionArgs = SELECTION_ARGS;
         }
-        return new AlbumLoader(context, selection, selectionArgs);
+
+        IgnoredPathHelper.SelectionConfig selectionConfig = IgnoredPathHelper.generateIgnoreSql(
+                selection, selectionArgs, PATH_HOLDER);
+        return new AlbumLoader(context, selectionConfig.selection, selectionConfig.selectionArgs);
     }
 
     @Override

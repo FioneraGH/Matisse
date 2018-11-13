@@ -261,6 +261,18 @@ public final class SelectionCreator {
     }
 
     /**
+     * Set to fullscreen of this activity.
+     *
+     * @param fullscreen An fullscreen constant.
+     *                    Default value is false.
+     * @return {@link SelectionCreator} for fluent API.
+     */
+    public SelectionCreator restrictFullscreen(boolean fullscreen) {
+        mSelectionSpec.fullscreen = fullscreen;
+        return this;
+    }
+
+    /**
      * Set a fixed span count for the media grid. Same for different screen orientations.
      * <p>
      * This will be ignored when {@link #gridExpectedSize(int)} is set.
@@ -340,6 +352,17 @@ public final class SelectionCreator {
      */
     public SelectionCreator setOnCheckedListener(@Nullable OnCheckedListener listener) {
         mSelectionSpec.onCheckedListener = listener;
+        return this;
+    }
+
+    /**
+     * Set path array for ignoring some album.
+     *
+     * @param ignoredPaths ignoredPaths
+     * @return {@link SelectionCreator} for fluent API.
+     */
+    public SelectionCreator setIgnoredPaths(@Nullable String[] ignoredPaths) {
+        mSelectionSpec.ignoredPaths = ignoredPaths;
         return this;
     }
 
