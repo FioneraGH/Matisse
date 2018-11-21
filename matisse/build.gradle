@@ -44,7 +44,9 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:${supportLibVersion}"
     implementation 'it.sephiroth.android.library.imagezoom:library:1.0.4'
 
-    compileOnly 'com.squareup.picasso:picasso:2.5.2'
+    compileOnly('com.squareup.picasso:picasso:2.71828') {
+        exclude group:'com.android.support'
+    }
 }
 
 checkstyle {
