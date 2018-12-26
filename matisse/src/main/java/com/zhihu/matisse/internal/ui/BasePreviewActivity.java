@@ -127,6 +127,9 @@ public abstract class BasePreviewActivity extends AppCompatActivity implements V
             @Override
             public void onClick(View v) {
                 Item item = mAdapter.getMediaItem(mPager.getCurrentItem());
+                if (item == null) {
+                    return;
+                }
                 if (mSelectedCollection.isSelected(item)) {
                     mSelectedCollection.remove(item);
                     if (mSpec.countable) {
@@ -250,6 +253,9 @@ public abstract class BasePreviewActivity extends AppCompatActivity implements V
             ((PreviewItemFragment) adapter.instantiateItem(mPager, mPreviousPos)).resetView();
 
             Item item = adapter.getMediaItem(position);
+            if (item == null) {
+                return;
+            }
             if (mSpec.countable) {
                 int checkedNum = mSelectedCollection.checkedNumOf(item);
                 mCheckView.setCheckedNum(checkedNum);
