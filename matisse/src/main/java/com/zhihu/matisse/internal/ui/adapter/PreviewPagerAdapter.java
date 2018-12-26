@@ -54,7 +54,19 @@ public class PreviewPagerAdapter extends FragmentPagerAdapter {
         }
     }
 
+    /**
+     * Return MediaItem at position, it might occur index out of bound when
+     * {@link com.zhihu.matisse.internal.ui.AlbumPreviewActivity#onAlbumMediaLoad(Cursor)} is not
+     * prepared.
+     * Early invocation return null for adjusting.
+     *
+     * @param position currentShowing
+     * @return item
+     */
     public Item getMediaItem(int position) {
+        if (position >= mItems.size()) {
+            return null;
+        }
         return mItems.get(position);
     }
 
