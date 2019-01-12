@@ -15,11 +15,13 @@
  */
 package com.zhihu.matisse.internal.ui;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -27,19 +29,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.github.chrisbanes.photoview.PhotoView;
 import com.zhihu.matisse.R;
 import com.zhihu.matisse.internal.entity.Item;
 import com.zhihu.matisse.internal.entity.SelectionSpec;
 import com.zhihu.matisse.internal.utils.PhotoMetadataUtils;
-import com.zhihu.matisse.listener.OnFragmentInteractionListener;
-
-import it.sephiroth.android.library.imagezoom.ImageViewTouch;
-import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
 
 public class PreviewItemFragment extends Fragment {
 
     private static final String ARGS_ITEM = "args_item";
-    private OnFragmentInteractionListener mListener;
 
     public static PreviewItemFragment newInstance(Item item) {
         PreviewItemFragment fragment = new PreviewItemFragment();
@@ -49,15 +47,21 @@ public class PreviewItemFragment extends Fragment {
         return fragment;
     }
 
+    private Activity mActivity;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_preview_item, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final Item item = getArguments().getParcelable(ARGS_ITEM);
+        final Bundle bundle = getArguments();
+        if (bundle == null) {
+            return;
+        }
+        final Item item = bundle.getParcelable(ARGS_ITEM);
         if (item == null) {
             return;
         }
@@ -81,19 +85,8 @@ public class PreviewItemFragment extends Fragment {
             videoPlayButton.setVisibility(View.GONE);
         }
 
-        ImageViewTouch image = (ImageViewTouch) view.findViewById(R.id.image_view);
-        image.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
-
-        image.setSingleTapListener(new ImageViewTouch.OnImageViewTouchSingleTapListener() {
-            @Override
-            public void onSingleTapConfirmed() {
-                if (mListener != null) {
-                    mListener.onClick();
-                }
-            }
-        });
-
-        Point size = PhotoMetadataUtils.getBitmapSize(item.getContentUri(), getActivity());
+        PhotoView image = view.findViewById(R.id.image_view);
+        Point size = PhotoMetadataUtils.getBitmapSize(item.getContentUri(), mActivity);
         if (item.isGif()) {
             SelectionSpec.getInstance().imageEngine.loadGifImage(getContext(), size.x, size.y, image,
                     item.getContentUri());
@@ -104,26 +97,17 @@ public class PreviewItemFragment extends Fragment {
     }
 
     public void resetView() {
-        if (getView() != null) {
-            ((ImageViewTouch) getView().findViewById(R.id.image_view)).resetMatrix();
-        }
     }
-
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+        mActivity = (Activity) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        mActivity = null;
     }
 }

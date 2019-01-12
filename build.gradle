@@ -17,18 +17,22 @@
 
 buildscript {
     repositories {
-        jcenter()
         google()
+        jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.0-alpha04'
+        classpath 'com.android.tools.build:gradle:3.4.0-alpha10'
     }
 }
 
 allprojects {
     repositories {
-        jcenter()
         google()
+        jcenter() {
+            content {
+                excludeGroup 'com.github.chrisbanes'
+            }
+        }
         maven { url 'https://jitpack.io' }
     }
 }

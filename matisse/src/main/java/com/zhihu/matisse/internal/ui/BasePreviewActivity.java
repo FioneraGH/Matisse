@@ -41,10 +41,10 @@ import com.zhihu.matisse.internal.ui.widget.CheckView;
 import com.zhihu.matisse.internal.ui.widget.IncapableDialog;
 import com.zhihu.matisse.internal.utils.PhotoMetadataUtils;
 import com.zhihu.matisse.internal.utils.Platform;
-import com.zhihu.matisse.listener.OnFragmentInteractionListener;
 
-public abstract class BasePreviewActivity extends AppCompatActivity implements View.OnClickListener,
-        ViewPager.OnPageChangeListener, OnFragmentInteractionListener {
+public abstract class BasePreviewActivity
+        extends AppCompatActivity
+        implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
     public static final String EXTRA_DEFAULT_BUNDLE = "extra_default_bundle";
     public static final String EXTRA_RESULT_BUNDLE = "extra_result_bundle";
@@ -211,7 +211,10 @@ public abstract class BasePreviewActivity extends AppCompatActivity implements V
         }
     }
 
-    @Override
+    /**
+     * Can use this hide toolbar
+     */
+    @SuppressWarnings("unused")
     public void onClick() {
         if (!mSpec.autoHideToobar) {
             return;
@@ -238,7 +241,6 @@ public abstract class BasePreviewActivity extends AppCompatActivity implements V
         }
 
         mIsToolbarHide = !mIsToolbarHide;
-
     }
 
     @Override

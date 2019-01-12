@@ -15,6 +15,7 @@
  */
 package com.zhihu.matisse.internal.ui.adapter;
 
+import android.database.Cursor;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
