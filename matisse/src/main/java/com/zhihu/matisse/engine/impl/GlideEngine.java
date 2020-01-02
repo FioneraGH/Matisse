@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.zhihu.matisse.sample;
+package com.zhihu.matisse.engine.impl;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -29,7 +29,7 @@ import com.zhihu.matisse.engine.ImageEngine;
  * {@link ImageEngine} implementation using Glide.
  */
 
-public class Glide4Engine implements ImageEngine {
+public class GlideEngine implements ImageEngine {
 
     @Override
     public void loadThumbnail(Context context, int resize, Drawable placeholder, ImageView imageView, Uri uri) {

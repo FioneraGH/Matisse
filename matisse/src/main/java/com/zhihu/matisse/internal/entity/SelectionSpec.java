@@ -17,7 +17,8 @@
 package com.zhihu.matisse.internal.entity;
 
 import android.content.pm.ActivityInfo;
-import android.support.annotation.StyleRes;
+
+import androidx.annotation.StyleRes;
 
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.R;
@@ -56,6 +57,7 @@ public final class SelectionSpec {
     public boolean autoHideToobar;
     public int originalMaxSize;
     public OnCheckedListener onCheckedListener;
+    public boolean showPreview;
 
     /**
      * 忽略的路径
@@ -97,6 +99,7 @@ public final class SelectionSpec {
         originalable = false;
         autoHideToobar = false;
         originalMaxSize = Integer.MAX_VALUE;
+        showPreview = true;
 
         ignoredPaths = new String[]{};
     }
@@ -123,6 +126,10 @@ public final class SelectionSpec {
 
     public String[] getIgnoredPaths() {
         return ignoredPaths;
+    }
+
+    public boolean onlyShowGif() {
+        return showSingleMediaType && MimeType.ofGif().equals(mimeTypeSet);
     }
 
     private static final class InstanceHolder {

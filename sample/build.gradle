@@ -16,14 +16,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 29
 
     defaultConfig {
         applicationId 'com.zhihu.matisse.sample'
-        minSdkVersion 21
-        //noinspection ExpiredTargetSdkVersion
-        targetSdkVersion 23
+        minSdkVersion 14
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
     }
@@ -31,26 +29,23 @@ android {
         abortOnError false
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
-
-ext.supportLibVersion = '26.1.0'
 
 dependencies {
     implementation project(':matisse')
 
-//    implementation 'com.zhihu.android:matisse:0.5.1-beta1'
+//    implementation 'com.zhihu.android:matisse:0.5.2'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "com.android.support:appcompat-v7:${supportLibVersion}"
-    implementation "com.android.support:recyclerview-v7:${supportLibVersion}"
-    implementation ('com.github.tbruyelle:rxpermissions:0.10.2') {
-        exclude group:'com.android.support'
-    }
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.3'
-    implementation('com.github.bumptech.glide:glide:4.7.1') {
+    implementation "androidx.appcompat:appcompat:1.1.0"
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.12'
+    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation('com.github.bumptech.glide:glide:4.10.0') {
         exclude group: 'com.android.support'
     }
     implementation('com.squareup.picasso:picasso:2.71828') {
